@@ -11,7 +11,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 <body>
-    <div id="app">
+    <!-- Welcome Screen Overlay -->
+    <div id="welcome-screen" class="welcome-screen">
+        <div class="welcome-content">
+            <h1>Witamy ponownie w merchkuQ!</h1>
+            <p>Wybierz zapisany projekt z Local Storage lub rozpocznij nowy.</p>
+            <div id="project-list" class="project-list">
+                <!-- Projects will be injected here -->
+            </div>
+            <button id="new-project-btn" class="primary-btn">➕ Nowy Projekt</button>
+        </div>
+    </div>
+
+    <div id="app" style="display: none;">
         <!-- Topbar Actions -->
         <header class="topbar">
             <h1>merchkuQ Projekt AI</h1>
@@ -26,6 +38,7 @@
             <button class="tab-btn" data-tab="tab-ai">Polecenia AI</button>
             <button class="tab-btn" data-tab="tab-engine">Podgląd silnika</button>
             <button class="tab-btn" data-tab="tab-game">Podgląd gry</button>
+            <button class="tab-btn" data-tab="tab-sandbox">Sandbox AI</button>
             <button class="tab-btn" data-tab="tab-settings">Ustawienia</button>
         </nav>
 
@@ -81,6 +94,19 @@
                     </div>
                     <div id="emulator-screen" style="display: none;">
                         <p id="emulator-status">Ładowanie zasobów...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: Sandbox AI -->
+            <section id="tab-sandbox" class="tab-content">
+                <div class="sandbox-panel">
+                    <div class="sandbox-header">
+                        <h2>Terminal AI (Sandbox Debugger)</h2>
+                        <span class="status-indicator">Oczekuje</span>
+                    </div>
+                    <div id="sandbox-console" class="sandbox-console">
+                        <div class="log-line">> Środowisko testowe Godot w trybie Sandbox zainicjowane. AI w trybie powolnego i głębokiego analizowania.</div>
                     </div>
                 </div>
             </section>

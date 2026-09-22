@@ -17,6 +17,82 @@ body, html {
     height: 100vh;
 }
 
+/* Welcome Screen */
+.welcome-screen {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0,0,0,0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.welcome-content {
+    background-color: #252526;
+    padding: 40px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.welcome-content h1 {
+    color: #4a90e2;
+    margin-bottom: 10px;
+}
+
+.welcome-content p {
+    color: #999;
+    margin-bottom: 30px;
+}
+
+.project-list {
+    margin-bottom: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+    text-align: left;
+}
+
+.project-item {
+    background-color: #333;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.project-item:hover {
+    background-color: #444;
+}
+
+.project-item strong {
+    color: #fff;
+}
+
+.project-item span {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.delete-project-btn {
+    background-color: transparent;
+    color: #e74c3c;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+}
+
+.delete-project-btn:hover {
+    color: #c0392b;
+}
+
 /* Topbar */
 .topbar {
     height: 50px;
@@ -90,13 +166,13 @@ body, html {
 
 /* Tab Content Visibility */
 .tab-content {
-    display: none;
+    display: none !important;
     height: 100%;
     width: 100%;
 }
 
 .tab-content.active {
-    display: flex;
+    display: flex !important;
     flex-direction: column;
 }
 
@@ -315,6 +391,60 @@ body, html {
     color: #2ecc71;
     font-family: monospace;
     font-size: 18px;
+}
+
+/* Sandbox AI Section */
+.sandbox-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #000;
+}
+
+.sandbox-header {
+    background-color: #252526;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+}
+
+.sandbox-header h2 {
+    font-size: 14px;
+    color: #4a90e2;
+    margin: 0;
+}
+
+.status-indicator {
+    font-size: 12px;
+    color: #e67e22;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.sandbox-console {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #0c0c0c;
+    color: #2ecc71;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    overflow-y: auto;
+}
+
+.log-line {
+    margin-bottom: 5px;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+.log-line.error {
+    color: #e74c3c;
+}
+
+.log-line.success {
+    color: #3498db;
 }
 
 /* Buttons */
