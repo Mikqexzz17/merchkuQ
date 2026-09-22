@@ -124,23 +124,65 @@ document.addEventListener('DOMContentLoaded', () => {
         addChatMessage('user', text);
         aiPromptInput.value = '';
 
-        // Simulate AI analyzing the request for Godot specifics
-        setTimeout(() => {
-            let aiResponse = `Zrozumiałem polecenie: "${text}". Przekazuję instrukcje do wbudowanego silnika Godot.`;
+        const lowerText = text.toLowerCase();
 
-            const lowerText = text.toLowerCase();
+        // Check configured APIs
+        if (apis.length === 0) {
+            setTimeout(() => {
+                addChatMessage('system', `System: Brak połączonych API. Przejdź do zakładki "API", aby dodać klucze i odblokować możliwości AI.`);
+            }, 500);
+            return;
+        }
 
-            if (lowerText.includes('skrypt')) {
-                aiResponse += `\nWygenerowano nowy skrypt (np. Player.gd) i dodano do projektu!`;
-                addVirtualFile('Player.gd', `extends CharacterBody2D\n\nconst SPEED = 300.0\n\nfunc _physics_process(delta):\n\tpass # Skrypt wygenerowany przez AI`);
-            }
-            if (lowerText.includes('model') || lowerText.includes('3d')) {
-                aiResponse += `\nStworzono bazowy model 3D (PlayerModel.obj) i dodano do sceny.`;
-                addVirtualFile('PlayerModel.obj', `# Prosty model OBJ wygenerowany przez AI\nv 0.0 0.0 0.0`);
-            }
+        if (apis.length === 1) {
+            // Single API logic
+            setTimeout(() => {
+                let aiResponse = `Zrozumiałem polecenie: "${text}". Przekazuję instrukcje do wbudowanego silnika Godot.`;
 
-            addChatMessage('system', `AI: ${aiResponse}`);
-        }, 1200);
+                if (lowerText.includes('skrypt')) {
+                    aiResponse += `\nWygenerowano nowy skrypt (np. Player.gd) i dodano do projektu!`;
+                    addVirtualFile('Player.gd', `extends CharacterBody2D\n\nconst SPEED = 300.0\n\nfunc _physics_process(delta):\n\tpass # Skrypt wygenerowany przez AI`);
+                }
+                if (lowerText.includes('model') || lowerText.includes('3d')) {
+                    aiResponse += `\nStworzono bazowy model 3D (PlayerModel.obj) i dodano do sceny.`;
+                    addVirtualFile('PlayerModel.obj', `# Prosty model OBJ wygenerowany przez AI\nv 0.0 0.0 0.0`);
+                }
+
+                addChatMessage('system', `AI (${apis[0].name}): ${aiResponse}`);
+            }, 1200);
+        } else {
+            // Multi API logic - divide roles
+            setTimeout(() => {
+                addChatMessage('system', `System: Wykryto ${apis.length} API. Rozpoczynam dzielenie zadań na role...`);
+
+                // Simulate Programmer API response
+                setTimeout(() => {
+                    const programmerApiName = apis[0].name;
+                    let progResponse = `Analizuję mechanikę. `;
+                    if (lowerText.includes('skrypt') || lowerText.includes('poruszan')) {
+                        progResponse += `Tworzę skrypt kontrolera postaci (Player.gd).`;
+                        addVirtualFile('Player.gd', `extends CharacterBody2D\n\nconst SPEED = 300.0\n\nfunc _physics_process(delta):\n\tpass # Skrypt wygenerowany przez ${programmerApiName} (Programista)`);
+                    } else {
+                        progResponse += `Konfiguruję podstawowe parametry sceny głównej.`;
+                    }
+                    addChatMessage('system-programmer', `[Role: Programista] ${programmerApiName}: ${progResponse}`);
+                }, 1000);
+
+                // Simulate Graphic Designer API response
+                setTimeout(() => {
+                    const graphicApiName = apis[1].name;
+                    let graphResponse = `Przygotowuję zasoby wizualne. `;
+                    if (lowerText.includes('model') || lowerText.includes('3d') || lowerText.includes('grafik')) {
+                        graphResponse += `Tworzę i ładuję model 3D (PlayerModel.obj).`;
+                        addVirtualFile('PlayerModel.obj', `# Prosty model OBJ wygenerowany przez ${graphicApiName} (Grafik)\nv 0.0 0.0 0.0`);
+                    } else {
+                        graphResponse += `Ustalam oświetlenie i środowisko wizualne.`;
+                    }
+                    addChatMessage('system-graphic', `[Role: Grafik] ${graphicApiName}: ${graphResponse}`);
+                }, 2000);
+
+            }, 800);
+        }
     }
 
     function addVirtualFile(filename, content, isBase64 = false) {

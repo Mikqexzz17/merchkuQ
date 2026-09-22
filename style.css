@@ -198,6 +198,18 @@ body, html {
     border-left: 4px solid #2ecc71;
 }
 
+.message.system-programmer {
+    background-color: #2b3a42;
+    align-self: flex-start;
+    border-left: 4px solid #3498db;
+}
+
+.message.system-graphic {
+    background-color: #3d2b38;
+    align-self: flex-start;
+    border-left: 4px solid #9b59b6;
+}
+
 .chat-input-area {
     padding: 20px;
     background-color: #252526;
