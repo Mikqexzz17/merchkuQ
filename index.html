@@ -12,64 +12,86 @@
 </head>
 <body>
     <div id="app">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <h2>merchkuQ</h2>
-            <div class="api-section">
-                <h3>Integracje API</h3>
-                <div id="api-list"></div>
-                <input type="text" id="api-name-input" placeholder="Nazwa API">
-                <input type="text" id="api-url-input" placeholder="URL/Klucz API">
-                <button id="add-api-btn">Dodaj API</button>
+        <!-- Topbar Actions -->
+        <header class="topbar">
+            <h1>merchkuQ Projekt AI</h1>
+            <div class="actions">
+                <button id="download-game-btn" class="action-btn">Pobierz grę</button>
             </div>
-        </aside>
+        </header>
 
-        <!-- Main Content -->
+        <!-- Browser-like Tab Bar -->
+        <nav class="tab-bar">
+            <button class="tab-btn active" data-tab="tab-api">API</button>
+            <button class="tab-btn" data-tab="tab-ai">Polecenia AI</button>
+            <button class="tab-btn" data-tab="tab-engine">Podgląd silnika</button>
+            <button class="tab-btn" data-tab="tab-game">Podgląd gry</button>
+            <button class="tab-btn" data-tab="tab-settings">Ustawienia</button>
+        </nav>
+
+        <!-- Main Content Area -->
         <main class="main-content">
-            <!-- Topbar Actions -->
-            <div class="topbar">
-                <h1>Projekt Godot AI</h1>
-                <div class="actions">
-                    <button id="test-game-btn" class="action-btn">Przetestuj grę</button>
-                    <button id="download-game-btn" class="action-btn">Pobierz grę</button>
-                </div>
-            </div>
 
-            <div class="workspace">
-                <!-- AI Chat / Code Editor -->
+            <!-- Tab: API -->
+            <section id="tab-api" class="tab-content active">
+                <div class="tab-container form-container">
+                    <h2>Zarządzanie API</h2>
+                    <p>Skonfiguruj połączenia z zewnętrznymi API (np. OpenAI, Anthropic) do zasilania asystenta AI.</p>
+                    <div class="api-section">
+                        <div id="api-list"></div>
+                        <input type="text" id="api-name-input" placeholder="Nazwa API (np. OpenAI)">
+                        <input type="text" id="api-url-input" placeholder="URL lub Klucz API">
+                        <button id="add-api-btn" class="primary-btn">Dodaj API</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: Polecenia AI -->
+            <section id="tab-ai" class="tab-content">
                 <div class="ai-panel">
                     <div class="chat-history" id="chat-history">
-                        <div class="message system">AI: Jestem gotowy do tworzenia gier w Godot. W czym mogę pomóc? Posiadam dostęp do wbudowanego silnika i połączonych API.</div>
+                        <div class="message system">AI: Znam każdy zakamarek Godot Engine. Mogę generować i dodawać skrypty, tworzyć modele 3D, konfigurować sceny i wykorzystywać Twoje połączone API. Wydaj mi polecenie!</div>
                     </div>
                     <div class="chat-input-area">
-                        <textarea id="ai-prompt-input" placeholder="Zleć AI co ma zrobić w Godot..."></textarea>
-                        <button id="send-prompt-btn">Wyślij do AI</button>
+                        <textarea id="ai-prompt-input" placeholder="Wpisz polecenie (np. 'Dodaj skrypt poruszania się', 'Stwórz model 3D gracza')..."></textarea>
+                        <button id="send-prompt-btn" class="primary-btn">Wyślij do AI</button>
                     </div>
                 </div>
+            </section>
 
-                <!-- Godot Engine iframe placeholder -->
+            <!-- Tab: Podgląd silnika -->
+            <section id="tab-engine" class="tab-content">
                 <div class="godot-engine-panel">
-                    <h2>Godot Web Editor</h2>
                     <div class="iframe-container">
                         <!-- Godot Web Editor embedded -->
                         <iframe id="godot-iframe" src="https://editor.godotengine.org/releases/4.2.1.stable/" title="Godot Web Editor"></iframe>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- Tab: Podgląd gry -->
+            <section id="tab-game" class="tab-content">
+                <div id="emulator-container">
+                    <div class="play-overlay" id="play-overlay">
+                        <button id="start-emulator-btn" class="primary-btn play-btn">▶ Uruchom Grę</button>
+                    </div>
+                    <div id="emulator-screen" style="display: none;">
+                        <p id="emulator-status">Ładowanie zasobów...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: Ustawienia -->
+            <section id="tab-settings" class="tab-content">
+                <div class="tab-container">
+                    <h2>Ustawienia Platformy</h2>
+                    <p>Tutaj znajdą się opcje konfiguracji środowiska, motywu i zaawansowanych parametrów Godot.</p>
+                    <button class="danger-btn" id="clear-data-btn">Wyczyść dane przeglądarki</button>
+                </div>
+            </section>
+
         </main>
     </div>
-
-    <!-- Emulator Modal -->
-    <div id="emulator-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>Emulator Gry</h2>
-            <div id="emulator-container">
-                <p>Uruchamianie gry...</p>
-            </div>
-        </div>
-    </div>
-
     <script src="script.js"></script>
 </body>
 </html>
