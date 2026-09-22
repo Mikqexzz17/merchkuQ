@@ -1,0 +1,297 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body, html {
+    height: 100%;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+#app {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #252526;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #333;
+}
+
+.sidebar h2 {
+    color: #4a90e2;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.api-section h3 {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #999;
+    text-transform: uppercase;
+}
+
+#api-list {
+    margin-bottom: 15px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.api-item {
+    background-color: #333;
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+
+.api-item button {
+    background: #e74c3c;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 2px 5px;
+}
+
+.api-section input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    background-color: #3c3c3c;
+    border: 1px solid #555;
+    color: #fff;
+    border-radius: 4px;
+}
+
+.api-section button#add-api-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.api-section button#add-api-btn:hover {
+    background-color: #357abd;
+}
+
+/* Main Content */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Topbar */
+.topbar {
+    height: 60px;
+    background-color: #2d2d2d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: 1px solid #333;
+}
+
+.topbar h1 {
+    font-size: 18px;
+    color: #ddd;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+}
+
+#test-game-btn {
+    background-color: #2ecc71;
+}
+
+#test-game-btn:hover {
+    background-color: #27ae60;
+}
+
+#download-game-btn {
+    background-color: #e67e22;
+}
+
+#download-game-btn:hover {
+    background-color: #d35400;
+}
+
+/* Workspace (Chat + Godot) */
+.workspace {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+/* AI Panel */
+.ai-panel {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    background-color: #252526;
+    border-right: 1px solid #333;
+}
+
+.chat-history {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    padding: 10px;
+    border-radius: 8px;
+    max-width: 90%;
+    word-wrap: break-word;
+    font-size: 14px;
+}
+
+.message.user {
+    background-color: #4a90e2;
+    align-self: flex-end;
+}
+
+.message.system {
+    background-color: #444;
+    align-self: flex-start;
+}
+
+.chat-input-area {
+    padding: 15px;
+    background-color: #2d2d2d;
+    border-top: 1px solid #333;
+}
+
+#ai-prompt-input {
+    width: 100%;
+    height: 80px;
+    background-color: #3c3c3c;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 10px;
+    resize: none;
+    margin-bottom: 10px;
+}
+
+#send-prompt-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Godot Engine Panel */
+.godot-engine-panel {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #1e1e1e;
+}
+
+.godot-engine-panel h2 {
+    font-size: 14px;
+    padding: 10px 20px;
+    background-color: #2d2d2d;
+    color: #999;
+    border-bottom: 1px solid #333;
+}
+
+.iframe-container {
+    flex-grow: 1;
+    position: relative;
+}
+
+#godot-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+}
+
+.modal-content {
+    background-color: #252526;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #444;
+    width: 80%;
+    max-width: 800px;
+    height: 70%;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.close-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    align-self: flex-end;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: white;
+}
+
+#emulator-container {
+    flex-grow: 1;
+    background-color: #111;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    color: #2ecc71;
+    font-family: monospace;
+}

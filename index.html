@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>merchkuQ - Platforma AI do Godot Engine</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- JSZip for creating zip files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- FileSaver for downloading files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>merchkuQ</h2>
+            <div class="api-section">
+                <h3>Integracje API</h3>
+                <div id="api-list"></div>
+                <input type="text" id="api-name-input" placeholder="Nazwa API">
+                <input type="text" id="api-url-input" placeholder="URL/Klucz API">
+                <button id="add-api-btn">Dodaj API</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar Actions -->
+            <div class="topbar">
+                <h1>Projekt Godot AI</h1>
+                <div class="actions">
+                    <button id="test-game-btn" class="action-btn">Przetestuj grę</button>
+                    <button id="download-game-btn" class="action-btn">Pobierz grę</button>
+                </div>
+            </div>
+
+            <div class="workspace">
+                <!-- AI Chat / Code Editor -->
+                <div class="ai-panel">
+                    <div class="chat-history" id="chat-history">
+                        <div class="message system">AI: Jestem gotowy do tworzenia gier w Godot. W czym mogę pomóc? Posiadam dostęp do wbudowanego silnika i połączonych API.</div>
+                    </div>
+                    <div class="chat-input-area">
+                        <textarea id="ai-prompt-input" placeholder="Zleć AI co ma zrobić w Godot..."></textarea>
+                        <button id="send-prompt-btn">Wyślij do AI</button>
+                    </div>
+                </div>
+
+                <!-- Godot Engine iframe placeholder -->
+                <div class="godot-engine-panel">
+                    <h2>Godot Web Editor</h2>
+                    <div class="iframe-container">
+                        <!-- Godot Web Editor embedded -->
+                        <iframe id="godot-iframe" src="https://editor.godotengine.org/releases/4.2.1.stable/" title="Godot Web Editor"></iframe>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Emulator Modal -->
+    <div id="emulator-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Emulator Gry</h2>
+            <div id="emulator-container">
+                <p>Uruchamianie gry...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
