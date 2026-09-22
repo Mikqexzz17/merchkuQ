@@ -54,7 +54,11 @@
                     </div>
                     <div class="chat-input-area">
                         <textarea id="ai-prompt-input" placeholder="Wpisz polecenie (np. 'Dodaj skrypt poruszania się', 'Stwórz model 3D gracza')..."></textarea>
-                        <button id="send-prompt-btn" class="primary-btn">Wyślij do AI</button>
+                        <div class="chat-actions">
+                            <input type="file" id="file-upload-input" style="display: none;" accept="image/*,audio/*,.obj,.fbx,.gltf,.glb">
+                            <button id="upload-btn" class="secondary-btn" title="Wgraj obraz, dźwięk lub model">📎 Wgraj plik</button>
+                            <button id="send-prompt-btn" class="primary-btn">Wyślij do AI</button>
+                        </div>
                     </div>
                 </div>
             </section>
