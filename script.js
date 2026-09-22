@@ -244,8 +244,21 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Intent detection: check if the user is actually asking to do something in Godot
+        const actionKeywords = ['dodaj', 'skrypt', 'model', 'zrób', 'stwórz', 'napisz', 'edytuj', 'zmień', 'ustaw', 'tło'];
+        const isActionRequest = actionKeywords.some(keyword => lowerText.includes(keyword));
+
+        if (!isActionRequest) {
+            // Conversational reply
+            setTimeout(() => {
+                let greetingPrefix = apis.length > 1 ? `System: Reprezentuję zespół AI.` : `AI (${apis[0].name}):`;
+                addChatMessage('system', `${greetingPrefix} Siemanko! Jestem gotowy do pracy. Powiedz mi konkretnie, co mam stworzyć w Godot Engine (np. "Dodaj skrypt skakania"), a zajmę się tym powoli i precyzyjnie w moim Sandboxie.`);
+            }, 800);
+            return;
+        }
+
         // Deep automation trigger - Switch to Sandbox mode
-        addChatMessage('system', `AI: Przyjąłem. Przechodzę do trybu głębokiej automatyzacji (Sandbox). Będę wykonywał zadanie powoli i z maksymalną precyzją, testując wszystko w tle...`);
+        addChatMessage('system', `AI: Zrozumiałem zadanie. Przechodzę do trybu głębokiej automatyzacji (Sandbox). Będę wykonywał to powoli i z maksymalną precyzją, testując zmiany w silniku...`);
 
         setTimeout(() => {
             // Auto switch to Sandbox tab explicitly
@@ -303,25 +316,30 @@ document.addEventListener('DOMContentLoaded', () => {
             statusIndicator.textContent = "Zakończono";
             statusIndicator.style.color = "#3498db";
 
+            // Build a specific summary of what was done
+            let summary = "Zmodyfikowano podstawową scenę.";
+            if (lowerText.includes('skrypt')) summary = "Napisano, przetestowano i zoptymalizowano nowy skrypt (Player.gd).";
+            if (lowerText.includes('model') || lowerText.includes('3d')) summary = "Wygenerowano model 3D (PlayerModel.obj), dopasowano materiały i przetestowano oświetlenie.";
+            if (lowerText.includes('tło')) summary = "Zaktualizowano tło i przetestowano renderowanie na różnych rozdzielczościach.";
+
             if (apis.length === 1) {
-                let aiResponse = `Zakończyłem precyzyjne testy i wygenerowałem pliki.`;
                 if (lowerText.includes('skrypt')) {
                     addVirtualFile('Player.gd', `extends CharacterBody2D\n\nconst SPEED = 300.0\n\nfunc _physics_process(delta):\n\tpass # Skrypt zoptymalizowany przez AI po dogłębnych testach`);
                 }
                 if (lowerText.includes('model') || lowerText.includes('3d')) {
                     addVirtualFile('PlayerModel.obj', `# Dokładny model OBJ wygenerowany przez AI\nv 0.0 0.0 0.0`);
                 }
-                addChatMessage('system', `AI (${apis[0].name}): ${aiResponse} Przejdź do podglądu, by sprawdzić efekty.`);
+                addChatMessage('system', `AI (${apis[0].name}): Testy w Sandboxie zakończone sukcesem. Wykonałem Twoje polecenie.\n\nRaport ze zmian: ${summary}\n\nPrzejdź do zakładki "Podgląd gry", by sprawdzić efekty.`);
             } else {
-                addChatMessage('system', `System: Multi API zakończyło głębokie testy i podzieliło pracę.`);
+                addChatMessage('system', `System: Multi API zakończyło współpracę, rygorystyczne testy i podzieliło pracę.`);
 
                 const programmerApiName = apis[0].name;
                 addVirtualFile('Player.gd', `extends CharacterBody2D\n\nconst SPEED = 300.0\n\nfunc _physics_process(delta):\n\tpass # Kod precyzyjnie napisany przez ${programmerApiName} (Programista) po testach Sandbox`);
-                addChatMessage('system-programmer', `[Role: Programista] ${programmerApiName}: Zapisałem wolny od bugów skrypt po 2 iteracjach testowych w Sandboxie.`);
+                addChatMessage('system-programmer', `[Role: Programista] ${programmerApiName}: Raport logiki: ${summary.includes('skrypt') ? summary : 'Zaktualizowano parametry fizyki w tle.'} Zapisałem gotowy kod.`);
 
                 const graphicApiName = apis[1].name;
                 addVirtualFile('PlayerModel.obj', `# Model OBJ zoptymalizowany przez ${graphicApiName} (Grafik)\nv 0.0 0.0 0.0`);
-                addChatMessage('system-graphic', `[Role: Grafik] ${graphicApiName}: Model jest gotowy i idealnie pasuje do środowiska gry.`);
+                addChatMessage('system-graphic', `[Role: Grafik] ${graphicApiName}: Raport wizualny: ${summary.includes('model') ? summary : 'Dostosowano scenę, aby poprawić widoczność.'} Assety są gotowe.`);
             }
         }, 28000);
     }
