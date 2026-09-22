@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>merchkuQ - Platforma AI do Godot Engine</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- JSZip for creating zip files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- FileSaver for downloading files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+    <!-- Welcome Screen Overlay -->
+    <div id="welcome-screen" class="welcome-screen">
+        <div class="welcome-content">
+            <h1>Witamy ponownie w merchkuQ!</h1>
+            <p>Wybierz zapisany projekt z Local Storage lub rozpocznij nowy.</p>
+            <div id="project-list" class="project-list">
+                <!-- Projects will be injected here -->
+            </div>
+            <button id="new-project-btn" class="primary-btn">➕ Nowy Projekt</button>
+        </div>
+    </div>
+
+    <div id="app" style="display: none;">
+        <!-- Topbar Actions -->
+        <header class="topbar">
+            <h1>merchkuQ Projekt AI</h1>
+            <div class="actions">
+                <button id="download-game-btn" class="action-btn">Pobierz grę</button>
+            </div>
+        </header>
+
+        <!-- Browser-like Tab Bar -->
+        <nav class="tab-bar">
+            <button class="tab-btn active" data-tab="tab-api">API</button>
+            <button class="tab-btn" data-tab="tab-ai">Polecenia AI</button>
+            <button class="tab-btn" data-tab="tab-engine">Podgląd silnika</button>
+            <button class="tab-btn" data-tab="tab-game">Podgląd gry</button>
+            <button class="tab-btn" data-tab="tab-sandbox">Sandbox AI</button>
+            <button class="tab-btn" data-tab="tab-settings">Ustawienia</button>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+            <!-- Tab: API -->
+            <section id="tab-api" class="tab-content active">
+                <div class="tab-container form-container">
+                    <h2>Zarządzanie API</h2>
+                    <p>Skonfiguruj połączenia z zewnętrznymi API (np. OpenAI, Anthropic) do zasilania asystenta AI.</p>
+                    <div class="api-section">
+                        <div id="api-list"></div>
+                        <input type="text" id="api-name-input" placeholder="Nazwa API (np. OpenAI)">
+                        <input type="text" id="api-url-input" placeholder="URL lub Klucz API">
+                        <button id="add-api-btn" class="primary-btn">Dodaj API</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: Polecenia AI -->
+            <section id="tab-ai" class="tab-content">
+                <div class="ai-panel">
+                    <div class="chat-history" id="chat-history">
+                        <div class="message system">AI: Znam każdy zakamarek Godot Engine. Mogę generować i dodawać skrypty, tworzyć modele 3D, konfigurować sceny i wykorzystywać Twoje połączone API. Wydaj mi polecenie!</div>
+                    </div>
+                    <div class="chat-input-area">
+                        <textarea id="ai-prompt-input" placeholder="Wpisz polecenie (np. 'Dodaj skrypt poruszania się', 'Stwórz model 3D gracza')..."></textarea>
+                        <div class="chat-actions">
+                            <input type="file" id="file-upload-input" style="display: none;" accept="image/*,audio/*,.obj,.fbx,.gltf,.glb">
+                            <button id="upload-btn" class="secondary-btn" title="Wgraj obraz, dźwięk lub model">📎 Wgraj plik</button>
+                            <button id="send-prompt-btn" class="primary-btn">Wyślij do AI</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: Podgląd silnika -->
+            <section id="tab-engine" class="tab-content">
+                <div class="godot-engine-panel">
+                    <div class="iframe-container">
+                        <!-- Godot Web Editor embedded -->
+                        <iframe id="godot-iframe" src="https://editor.godotengine.org/releases/4.2.1.stable/" title="Godot Web Editor"></iframe>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: Podgląd gry -->
+            <section id="tab-game" class="tab-content">
+                <div id="emulator-container">
+                    <div class="play-overlay" id="play-overlay">
+                        <button id="start-emulator-btn" class="primary-btn play-btn">▶ Uruchom Grę</button>
+                    </div>
+                    <div id="emulator-screen" style="display: none;">
+                        <p id="emulator-status">Ładowanie zasobów...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: Sandbox AI -->
+            <section id="tab-sandbox" class="tab-content">
+                <div class="sandbox-panel">
+                    <div class="sandbox-header">
+                        <h2>Terminal AI (Sandbox Debugger)</h2>
+                        <span class="status-indicator">Oczekuje</span>
+                    </div>
+                    <div id="sandbox-console" class="sandbox-console">
+                        <div class="log-line">> Środowisko testowe Godot w trybie Sandbox zainicjowane. AI w trybie powolnego i głębokiego analizowania.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: Ustawienia -->
+            <section id="tab-settings" class="tab-content">
+                <div class="tab-container">
+                    <h2>Ustawienia Platformy</h2>
+                    <p>Tutaj znajdą się opcje konfiguracji środowiska, motywu i zaawansowanych parametrów Godot.</p>
+                    <button class="danger-btn" id="clear-data-btn">Wyczyść dane przeglądarki</button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

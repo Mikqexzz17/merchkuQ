@@ -1,0 +1,478 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body, html {
+    height: 100%;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Welcome Screen */
+.welcome-screen {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0,0,0,0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.welcome-content {
+    background-color: #252526;
+    padding: 40px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.welcome-content h1 {
+    color: #4a90e2;
+    margin-bottom: 10px;
+}
+
+.welcome-content p {
+    color: #999;
+    margin-bottom: 30px;
+}
+
+.project-list {
+    margin-bottom: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+    text-align: left;
+}
+
+.project-item {
+    background-color: #333;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.project-item:hover {
+    background-color: #444;
+}
+
+.project-item strong {
+    color: #fff;
+}
+
+.project-item span {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.delete-project-btn {
+    background-color: transparent;
+    color: #e74c3c;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+}
+
+.delete-project-btn:hover {
+    color: #c0392b;
+}
+
+/* Topbar */
+.topbar {
+    height: 50px;
+    background-color: #252526;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.topbar h1 {
+    font-size: 16px;
+    color: #4a90e2;
+}
+
+.action-btn {
+    padding: 6px 12px;
+    background-color: #e67e22;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+}
+
+.action-btn:hover {
+    background-color: #d35400;
+}
+
+/* Tab Bar */
+.tab-bar {
+    display: flex;
+    background-color: #2d2d2d;
+    border-bottom: 1px solid #444;
+    padding-top: 5px;
+    padding-left: 10px;
+}
+
+.tab-btn {
+    background-color: #2d2d2d;
+    color: #999;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 2px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    border: 1px solid transparent;
+    border-bottom: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.tab-btn:hover {
+    background-color: #333;
+    color: #ccc;
+}
+
+.tab-btn.active {
+    background-color: #1e1e1e;
+    color: #fff;
+    border-color: #444;
+}
+
+/* Main Content area */
+.main-content {
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Tab Content Visibility */
+.tab-content {
+    display: none !important;
+    height: 100%;
+    width: 100%;
+}
+
+.tab-content.active {
+    display: flex !important;
+    flex-direction: column;
+}
+
+/* General Tab Containers */
+.tab-container {
+    padding: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.tab-container h2 {
+    margin-bottom: 10px;
+    color: #ddd;
+}
+
+.tab-container p {
+    color: #999;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* API Section */
+.form-container .api-section {
+    background-color: #252526;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+
+#api-list {
+    margin-bottom: 20px;
+}
+
+.api-item {
+    background-color: #333;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.api-item button {
+    background: #e74c3c;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 4px 8px;
+}
+
+.api-section input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #3c3c3c;
+    border: 1px solid #555;
+    color: #fff;
+    border-radius: 4px;
+}
+
+/* AI Chat Section */
+.ai-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.chat-history {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message {
+    padding: 12px 16px;
+    border-radius: 8px;
+    max-width: 85%;
+    word-wrap: break-word;
+    line-height: 1.4;
+}
+
+.message.user {
+    background-color: #4a90e2;
+    align-self: flex-end;
+}
+
+.message.system {
+    background-color: #333;
+    align-self: flex-start;
+    border-left: 4px solid #2ecc71;
+}
+
+.message.system-programmer {
+    background-color: #2b3a42;
+    align-self: flex-start;
+    border-left: 4px solid #3498db;
+}
+
+.message.system-graphic {
+    background-color: #3d2b38;
+    align-self: flex-start;
+    border-left: 4px solid #9b59b6;
+}
+
+.chat-input-area {
+    padding: 20px;
+    background-color: #252526;
+    border-top: 1px solid #333;
+}
+
+#ai-prompt-input {
+    width: 100%;
+    height: 80px;
+    background-color: #3c3c3c;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 10px;
+    resize: none;
+    margin-bottom: 10px;
+}
+
+.chat-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.chat-actions button {
+    flex: 1;
+}
+
+.secondary-btn {
+    padding: 12px;
+    background-color: #34495e;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.secondary-btn:hover {
+    background-color: #2c3e50;
+}
+
+/* Godot Engine Section */
+.godot-engine-panel {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.iframe-container {
+    flex-grow: 1;
+    position: relative;
+}
+
+#godot-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Game Emulator Section */
+#emulator-container {
+    height: 100%;
+    background-color: #111;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.play-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.play-btn {
+    font-size: 20px;
+    padding: 15px 30px;
+    background-color: #2ecc71;
+    border-radius: 30px;
+}
+
+.play-btn:hover {
+    background-color: #27ae60;
+}
+
+#emulator-screen {
+    width: 80%;
+    height: 80%;
+    background-color: #222;
+    border: 2px solid #444;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    color: #2ecc71;
+    font-family: monospace;
+    font-size: 18px;
+}
+
+/* Sandbox AI Section */
+.sandbox-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #000;
+}
+
+.sandbox-header {
+    background-color: #252526;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+}
+
+.sandbox-header h2 {
+    font-size: 14px;
+    color: #4a90e2;
+    margin: 0;
+}
+
+.status-indicator {
+    font-size: 12px;
+    color: #e67e22;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.sandbox-console {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #0c0c0c;
+    color: #2ecc71;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    overflow-y: auto;
+}
+
+.log-line {
+    margin-bottom: 5px;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+.log-line.error {
+    color: #e74c3c;
+}
+
+.log-line.success {
+    color: #3498db;
+}
+
+/* Buttons */
+.primary-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.primary-btn:hover {
+    background-color: #357abd;
+}
+
+.danger-btn {
+    padding: 10px 20px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.danger-btn:hover {
+    background-color: #c0392b;
+}
