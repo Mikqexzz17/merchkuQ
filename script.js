@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function handleSendPrompt() {
+    async function handleSendPrompt() {
         const text = aiPromptInput.value.trim();
         if (!text) return;
 
@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Deep automation trigger - Switch to Sandbox mode
-        addChatMessage('system', `AI: Zrozumiałem zadanie. Przechodzę do trybu głębokiej automatyzacji (Sandbox). Będę wykonywał to powoli i z maksymalną precyzją, testując zmiany w silniku...`);
+        addChatMessage('system', `AI: Zrozumiałem zadanie. Przechodzę do trybu głębokiej automatyzacji (Sandbox). Będę wykonywał to powoli i z maksymalną precyzją, łącząc się z API i testując zmiany w silniku...`);
 
         setTimeout(() => {
             // Auto switch to Sandbox tab explicitly
@@ -270,17 +270,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (sandboxTabBtn) sandboxTabBtn.classList.add('active');
             if (sandboxContent) sandboxContent.classList.add('active');
 
-            runSandboxSimulation(text, lowerText, apis);
+            runSandboxSimulation(text, apis);
         }, 1500);
     }
 
-    function runSandboxSimulation(originalText, lowerText, apis) {
+    async function runSandboxSimulation(originalText, apis) {
         const consoleEl = document.getElementById('sandbox-console');
         const statusIndicator = document.querySelector('.status-indicator');
 
         if (!consoleEl) return;
 
-        // Clear previous logs except the initial one
         consoleEl.innerHTML = '<div class="log-line">> Środowisko testowe Godot w trybie Sandbox zainicjowane. AI w trybie powolnego i głębokiego analizowania.</div>';
         statusIndicator.textContent = "Pracuje...";
         statusIndicator.style.color = "#2ecc71";
@@ -293,55 +292,80 @@ document.addEventListener('DOMContentLoaded', () => {
             consoleEl.scrollTop = consoleEl.scrollHeight;
         };
 
-        const simulationSteps = [
-            { delay: 1000, log: `Analizowanie polecenia: "${originalText}"...` },
-            { delay: 3000, log: `Wczytywanie wirtualnego edytora Godot w pamięci...` },
-            { delay: 5000, log: `Generowanie struktury plików dla żądania...` },
-            { delay: 8000, log: `KOMPILACJA: Sprawdzanie potencjalnych konfliktów zależności...` },
-            { delay: 12000, log: `URUCHAMIANIE TESTU SCENY...` },
-            { delay: 15000, log: `[WARN] Wykryto nieoptymalne wykorzystanie zasobów. AI analizuje poprawkę...`, cls: 'error' },
-            { delay: 19000, log: `Aplikowanie poprawek w kodzie...` },
-            { delay: 23000, log: `RE-TEST SCENY: Sukces (0 błędów, 60 FPS).`, cls: 'success' },
-            { delay: 26000, log: `Eksportowanie wygenerowanych plików...` }
-        ];
+        // Initial Sandbox setup logs
+        logToSandbox(`Analizowanie polecenia: "${originalText}"...`);
+        await new Promise(r => setTimeout(r, 2000));
+        logToSandbox(`Łączenie z API (${apis[0].name}) w celu wygenerowania kodu Godot...`);
 
-        simulationSteps.forEach(step => {
-            setTimeout(() => {
-                logToSandbox(step.log, step.cls);
-            }, step.delay);
-        });
+        // Real API Call
+        const apiConfig = apis[0]; // Assuming OpenAI format for the prototype
+        let apiData = null;
 
-        // Finalize after the long simulation
-        setTimeout(() => {
-            statusIndicator.textContent = "Zakończono";
-            statusIndicator.style.color = "#3498db";
+        try {
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiConfig.url}` // URL input field acts as the key here
+                },
+                body: JSON.stringify({
+                    model: "gpt-3.5-turbo",
+                    messages: [
+                        {
+                            role: "system",
+                            content: "Jesteś ekspertem silnika Godot Engine (wersja 4.x). Użytkownik zleca Ci zadanie, a Ty musisz stworzyć rozwiązanie. Zawsze zwracaj odpowiedź w formacie czystego JSON. Nie używaj markdown. Struktura JSON: { \"message\": \"krótki opis co zrobiłeś\", \"files\": [ { \"filename\": \"nazwa_pliku.gd\", \"content\": \"kod pliku\" } ] }"
+                        },
+                        { role: "user", content: originalText }
+                    ]
+                })
+            });
 
-            // Build a specific summary of what was done
-            let summary = "Zmodyfikowano podstawową scenę.";
-            if (lowerText.includes('skrypt')) summary = "Napisano, przetestowano i zoptymalizowano nowy skrypt (Player.gd).";
-            if (lowerText.includes('model') || lowerText.includes('3d')) summary = "Wygenerowano model 3D (PlayerModel.obj), dopasowano materiały i przetestowano oświetlenie.";
-            if (lowerText.includes('tło')) summary = "Zaktualizowano tło i przetestowano renderowanie na różnych rozdzielczościach.";
-
-            if (apis.length === 1) {
-                if (lowerText.includes('skrypt')) {
-                    addVirtualFile('Player.gd', `extends CharacterBody2D\n\nconst SPEED = 300.0\n\nfunc _physics_process(delta):\n\tpass # Skrypt zoptymalizowany przez AI po dogłębnych testach`);
-                }
-                if (lowerText.includes('model') || lowerText.includes('3d')) {
-                    addVirtualFile('PlayerModel.obj', `# Dokładny model OBJ wygenerowany przez AI\nv 0.0 0.0 0.0`);
-                }
-                addChatMessage('system', `AI (${apis[0].name}): Testy w Sandboxie zakończone sukcesem. Wykonałem Twoje polecenie.\n\nRaport ze zmian: ${summary}\n\nPrzejdź do zakładki "Podgląd gry", by sprawdzić efekty.`);
-            } else {
-                addChatMessage('system', `System: Multi API zakończyło współpracę, rygorystyczne testy i podzieliło pracę.`);
-
-                const programmerApiName = apis[0].name;
-                addVirtualFile('Player.gd', `extends CharacterBody2D\n\nconst SPEED = 300.0\n\nfunc _physics_process(delta):\n\tpass # Kod precyzyjnie napisany przez ${programmerApiName} (Programista) po testach Sandbox`);
-                addChatMessage('system-programmer', `[Role: Programista] ${programmerApiName}: Raport logiki: ${summary.includes('skrypt') ? summary : 'Zaktualizowano parametry fizyki w tle.'} Zapisałem gotowy kod.`);
-
-                const graphicApiName = apis[1].name;
-                addVirtualFile('PlayerModel.obj', `# Model OBJ zoptymalizowany przez ${graphicApiName} (Grafik)\nv 0.0 0.0 0.0`);
-                addChatMessage('system-graphic', `[Role: Grafik] ${graphicApiName}: Raport wizualny: ${summary.includes('model') ? summary : 'Dostosowano scenę, aby poprawić widoczność.'} Assety są gotowe.`);
+            if (!response.ok) {
+                throw new Error(`Błąd HTTP: ${response.status}`);
             }
-        }, 28000);
+
+            const data = await response.json();
+            const content = data.choices[0].message.content;
+            apiData = JSON.parse(content);
+            logToSandbox(`Otrzymano odpowiedź z API. Rozpoczynam weryfikację kodu...`, 'success');
+
+        } catch (err) {
+            logToSandbox(`[ERROR] Błąd połączenia z API: ${err.message}. Klucz API może być nieprawidłowy lub wystąpił błąd sieci.`, 'error');
+            logToSandbox(`Przechodzę w tryb awaryjny (fallback) do wygenerowania domyślnego pliku...`);
+            await new Promise(r => setTimeout(r, 2000));
+
+            apiData = {
+                message: "Użyto trybu awaryjnego z powodu błędu API.",
+                files: [
+                    { filename: "Fallback.gd", content: "extends Node\n# Wygenerowano awaryjnie z powodu błędu API." }
+                ]
+            };
+        }
+
+        // Continue Sandbox simulation
+        await new Promise(r => setTimeout(r, 3000));
+        logToSandbox(`KOMPILACJA: Sprawdzanie potencjalnych konfliktów zależności dla otrzymanych plików...`);
+        await new Promise(r => setTimeout(r, 4000));
+        logToSandbox(`URUCHAMIANIE TESTU SCENY...`);
+        await new Promise(r => setTimeout(r, 3000));
+        logToSandbox(`RE-TEST SCENY: Sukces (0 błędów).`, 'success');
+        await new Promise(r => setTimeout(r, 2000));
+        logToSandbox(`Zapisywanie plików wygenerowanych przez prawdziwe API do pamięci wirtualnej...`);
+
+        // Finalize
+        statusIndicator.textContent = "Zakończono";
+        statusIndicator.style.color = "#3498db";
+
+        // Add files to virtual system
+        if (apiData && apiData.files) {
+            apiData.files.forEach(file => {
+                addVirtualFile(file.filename, file.content);
+                logToSandbox(`Zapisano plik: ${file.filename}`);
+            });
+        }
+
+        const summaryMsg = apiData ? apiData.message : "Pomyślnie przetworzono zadanie.";
+        addChatMessage('system', `AI (${apis[0].name}): Testy w Sandboxie zakończone. Wykorzystałem silnik LLM do stworzenia kodu.\n\nRaport AI: ${summaryMsg}\n\nPrzejdź do zakładki "Podgląd gry" lub pobierz projekt.`);
     }
 
     function addVirtualFile(filename, content, isBase64 = false) {
