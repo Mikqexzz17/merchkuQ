@@ -244,19 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Intent detection: check if the user is actually asking to do something in Godot
-        const actionKeywords = ['dodaj', 'skrypt', 'model', 'zrób', 'stwórz', 'napisz', 'edytuj', 'zmień', 'ustaw', 'tło'];
-        const isActionRequest = actionKeywords.some(keyword => lowerText.includes(keyword));
-
-        if (!isActionRequest) {
-            // Conversational reply
-            setTimeout(() => {
-                let greetingPrefix = apis.length > 1 ? `System: Reprezentuję zespół AI.` : `AI (${apis[0].name}):`;
-                addChatMessage('system', `${greetingPrefix} Siemanko! Jestem gotowy do pracy. Powiedz mi konkretnie, co mam stworzyć w Godot Engine (np. "Dodaj skrypt skakania"), a zajmę się tym powoli i precyzyjnie w moim Sandboxie.`);
-            }, 800);
-            return;
-        }
-
         // Deep automation trigger - Switch to Sandbox mode
         addChatMessage('system', `AI: Zrozumiałem zadanie. Przechodzę do trybu głębokiej automatyzacji (Sandbox). Będę wykonywał to powoli i z maksymalną precyzją, łącząc się z API i testując zmiany w silniku...`);
 
