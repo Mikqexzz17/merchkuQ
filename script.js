@@ -298,25 +298,32 @@ document.addEventListener('DOMContentLoaded', () => {
         logToSandbox(`Łączenie z API (${apis[0].name}) w celu wygenerowania kodu Godot...`);
 
         // Real API Call
-        const apiConfig = apis[0]; // Assuming OpenAI format for the prototype
+        const apiConfig = apis[0];
         let apiData = null;
 
         try {
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            // Using Google Gemini API (gemini-1.5-flash) via AI Studio
+            const apiKey = apiConfig.url; // URL input field acts as the key here
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiConfig.url}` // URL input field acts as the key here
                 },
                 body: JSON.stringify({
-                    model: "gpt-3.5-turbo",
-                    messages: [
-                        {
-                            role: "system",
-                            content: "Jesteś ekspertem silnika Godot Engine (wersja 4.x). Użytkownik zleca Ci zadanie, a Ty musisz stworzyć rozwiązanie. Zawsze zwracaj odpowiedź w formacie czystego JSON. Nie używaj markdown. Struktura JSON: { \"message\": \"krótki opis co zrobiłeś\", \"files\": [ { \"filename\": \"nazwa_pliku.gd\", \"content\": \"kod pliku\" } ] }"
-                        },
-                        { role: "user", content: originalText }
-                    ]
+                    system_instruction: {
+                        parts: [
+                            { text: "Jesteś ekspertem silnika Godot Engine (wersja 4.x). Użytkownik zleca Ci zadanie, a Ty musisz stworzyć rozwiązanie. Zawsze zwracaj odpowiedź w formacie czystego JSON bez znaczników markdown. Struktura JSON: { \"message\": \"krótki opis co zrobiłeś\", \"files\": [ { \"filename\": \"nazwa_pliku.gd\", \"content\": \"kod pliku\" } ] }" }
+                        ]
+                    },
+                    contents: [
+                        { parts: [{ text: originalText }] }
+                    ],
+                    generationConfig: {
+                        response_mime_type: "application/json",
+                        temperature: 0.2
+                    }
                 })
             });
 
@@ -325,9 +332,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
-            const content = data.choices[0].message.content;
+            const content = data.candidates[0].content.parts[0].text;
             apiData = JSON.parse(content);
-            logToSandbox(`Otrzymano odpowiedź z API. Rozpoczynam weryfikację kodu...`, 'success');
+            logToSandbox(`Otrzymano i poprawnie przetworzono odpowiedź od Gemini API. Rozpoczynam weryfikację kodu...`, 'success');
 
         } catch (err) {
             logToSandbox(`[ERROR] Błąd połączenia z API: ${err.message}. Klucz API może być nieprawidłowy lub wystąpił błąd sieci.`, 'error');
